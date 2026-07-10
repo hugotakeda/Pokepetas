@@ -1,16 +1,29 @@
-# React + Vite
+# Pokédex 3D
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Uma Pokédex 3D interativa e moderna construída com React e Vite. Explore os Pokémon em um ambiente tridimensional incrível, com animações ricas, design elegante e informações detalhadas. Uma experiência premium para fãs, com performance otimizada e interface imersiva.
 
-Currently, two official plugins are available:
+## 🚀 Tecnologias
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- [React](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [Oxlint](https://oxc.rs/)
 
-## React Compiler
+## 💻 Como executar o projeto
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. Instale as dependências:
+```bash
+npm install
+```
 
-## Expanding the Oxlint configuration
+2. Execute o servidor de desenvolvimento:
+```bash
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+3. Acesse o projeto no seu navegador, normalmente em: `http://localhost:5173`
+
+## ✨ Funcionalidades
+
+- Visualização 3D interativa dos Pokémon.
+- Interface moderna e fluida com design premium.
+- Detalhes informativos e status completos de cada Pokémon.
