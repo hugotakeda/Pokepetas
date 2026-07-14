@@ -1,4 +1,5 @@
 import React from 'react';
+import { getPokemonSprite } from '../api/pokeApi';
 
 const PlannerGrid = ({ 
   pokemonList, 
@@ -6,9 +7,8 @@ const PlannerGrid = ({
   onAddPokemon, 
   searchQuery, 
   setSearchQuery, 
-  loading, 
-  hasMore, 
-  onLoadMore 
+  loading,
+  hideSearch
 }) => {
   // Check if a pokemon is already in the team (max 6)
   const isTeamFull = team.length >= 6;
@@ -16,15 +16,17 @@ const PlannerGrid = ({
 
   return (
     <div className="planner-grid-container">
-      <div className="planner-controls">
-        <input 
-          type="text" 
-          className="planner-search"
-          placeholder="Search Pokémon..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
+      {!hideSearch && (
+        <div className="planner-controls" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+          <input 
+            type="text" 
+            className="planner-search"
+            placeholder="Search Pokémon..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+      )}
 
       <div className="planner-grid">
         {pokemonList.map((pokemon) => {
@@ -41,7 +43,7 @@ const PlannerGrid = ({
               }}
             >
               <img 
-                src={pokemon.sprites?.front_default || pokemon.sprites?.other?.['official-artwork']?.front_default} 
+                src={getPokemonSprite(pokemon, false, false)} 
                 alt={pokemon.name} 
               />
             </div>
@@ -50,16 +52,6 @@ const PlannerGrid = ({
       </div>
 
       {loading && <div className="tp-loading">Loading Pokémon...</div>}
-      
-      {!loading && hasMore && (
-        <button 
-          className="load-more-btn" 
-          style={{ margin: '2rem auto', display: 'block', backgroundColor: '#3498db', color: 'white' }}
-          onClick={onLoadMore}
-        >
-          Load More
-        </button>
-      )}
     </div>
   );
 };

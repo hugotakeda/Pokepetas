@@ -20,6 +20,21 @@ export const getPokemonDetails = async (url) => {
   return response.json();
 };
 
+export const getPokedexList = async () => {
+  // Fetch common mainline pokedexes
+  const response = await fetch(`${BASE_URL}/pokedex?limit=50`);
+  const data = await response.json();
+  // Filter some known useful ones or just return all
+  return data.results;
+};
+
+export const getPokedexEntries = async (url) => {
+  const response = await fetch(url);
+  const data = await response.json();
+  // returns an array of pokemon_species
+  return data.pokemon_entries.map(entry => entry.pokemon_species);
+};
+
 // Fetch all 18 types once and cache them
 let typesCache = null;
 
@@ -125,3 +140,31 @@ export const calculateTeamDefense = (team, allTypesData) => {
 
   return defense;
 };
+
+/**
+ * Returns the correct sprite URL based on shiny and gender preferences.
+ * Falls back gracefully if the specific sprite doesn't exist.
+ */
+export const getPokemonSprite = (pokemon, isShiny, isFemale) => {
+  const sprites = pokemon.sprites;
+  if (!sprites) return '';
+  
+  const official = sprites.other?.['official-artwork'];
+  
+  if (isShiny && isFemale) {
+    return official?.front_shiny_female || sprites.front_shiny_female || 
+           official?.front_shiny || sprites.front_shiny || 
+           official?.front_default || sprites.front_default;
+  }
+  if (isShiny) {
+    return official?.front_shiny || sprites.front_shiny || 
+           official?.front_default || sprites.front_default;
+  }
+  if (isFemale) {
+    return official?.front_female || sprites.front_female || 
+           official?.front_default || sprites.front_default;
+  }
+  
+  return official?.front_default || sprites.front_default;
+};
+
