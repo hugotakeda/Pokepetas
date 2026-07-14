@@ -86,3 +86,42 @@ export const calculateWeaknesses = (types, allTypesData) => {
 
   return weaknesses;
 };
+
+/**
+ * Calculates the team's combined defense against all types.
+ * Returns an object with types as keys and how many pokemon are weak/resistant to it.
+ */
+export const calculateTeamDefense = (team, allTypesData) => {
+  if (!allTypesData) return {};
+  
+  // Initialize defense tally
+  const defense = {};
+  Object.keys(allTypesData).forEach(t => {
+    defense[t] = { weak: 0, resist: 0, immune: 0 };
+  });
+
+  team.forEach(pokemon => {
+    if (!pokemon) return;
+    
+    const multipliers = {};
+    Object.keys(allTypesData).forEach(t => multipliers[t] = 1);
+    
+    pokemon.types.forEach(typeObj => {
+      const typeName = typeObj.type.name;
+      const damageRelations = allTypesData[typeName];
+      if (!damageRelations) return;
+
+      damageRelations.double_damage_from.forEach(t => { multipliers[t.name] *= 2; });
+      damageRelations.half_damage_from.forEach(t => { multipliers[t.name] *= 0.5; });
+      damageRelations.no_damage_from.forEach(t => { multipliers[t.name] *= 0; });
+    });
+
+    Object.entries(multipliers).forEach(([type, multiplier]) => {
+      if (multiplier > 1) defense[type].weak += 1;
+      else if (multiplier === 0) defense[type].immune += 1;
+      else if (multiplier < 1) defense[type].resist += 1;
+    });
+  });
+
+  return defense;
+};

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getPokemonList, getPokemonDetails, getAllTypes, getAllPokemon } from './api/pokeApi';
 import PokemonCard from './components/PokemonCard';
+import TeamPlanner from './components/TeamPlanner';
 
 function App() {
   const [pokemonList, setPokemonList] = useState([]);
@@ -12,6 +13,7 @@ function App() {
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState('');
+  const [view, setView] = useState('pokedex'); // 'pokedex' | 'planner'
   const LIMIT = 20;
 
   useEffect(() => {
@@ -135,12 +137,46 @@ function App() {
         <h1>Poképetas</h1>
         <p>Explore Pokémon types and weaknesses in a modern 3D interface.</p>
         
-        <form className="search-form" onSubmit={(e) => e.preventDefault()}>
-          <div className="search-input-wrapper">
-            <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
+        <div className="view-toggle" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+          <button 
+            onClick={() => setView('pokedex')}
+            style={{
+              padding: '0.8rem 1.5rem',
+              borderRadius: '8px',
+              border: 'none',
+              backgroundColor: view === 'pokedex' ? '#38bdf8' : 'rgba(255,255,255,0.1)',
+              color: 'white',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              transition: 'background-color 0.2s'
+            }}
+          >
+            3D Pokédex
+          </button>
+          <button 
+            onClick={() => setView('planner')}
+            style={{
+              padding: '0.8rem 1.5rem',
+              borderRadius: '8px',
+              border: 'none',
+              backgroundColor: view === 'planner' ? '#38bdf8' : 'rgba(255,255,255,0.1)',
+              color: 'white',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              transition: 'background-color 0.2s'
+            }}
+          >
+            Team Planner
+          </button>
+        </div>
+        
+        {view === 'pokedex' && (
+          <form className="search-form" onSubmit={(e) => e.preventDefault()}>
+            <div className="search-input-wrapper">
+              <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
             <input 
               type="text" 
               placeholder="Search by name or ID..." 
@@ -157,10 +193,15 @@ function App() {
             )}
           </div>
         </form>
+        )}
       </header>
 
       <main>
-        {error && <div className="error-message">{error}</div>}
+        {view === 'planner' ? (
+          <TeamPlanner allTypesData={allTypesData} />
+        ) : (
+          <>
+            {error && <div className="error-message">{error}</div>}
 
         <div className="pokemon-grid">
           {pokemonList.map((pokemon) => (
@@ -186,6 +227,8 @@ function App() {
           >
             Load More Pokémon
           </button>
+        )}
+          </>
         )}
       </main>
     </div>
